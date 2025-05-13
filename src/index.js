@@ -18,6 +18,15 @@ const handler = new CommandHandler(client);
 // ✅ Bloque para el bot
 client.once('ready', () => {
   console.log(`✅ Bot listo como ${client.user.tag}`);
+  
+  // 🧑‍💻 Agrega esto para el health check después de que el bot esté listo
+  const port = process.env.PORT || 8000; // Usa el puerto 8000 para el health check
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Bot is running\n'); // Respuesta del servidor
+  }).listen(port, () => {
+    console.log(`Health check server listening on port ${port}`);
+  });
 });
 
 client.on('error', (error) => {
@@ -30,12 +39,3 @@ client.on('messageCreate', (message) => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-
-// 🧑‍💻 Agrega esto para el health check
-const port = process.env.PORT || 8000; // Usa el puerto 8000 para el health check
-http.createServer((req, res) => {
-  res.writeHead(200);
-  res.end('Bot is running\n'); // Respuesta del servidor
-}).listen(port, () => {
-  console.log(`Health check server listening on port ${port}`);
-});
